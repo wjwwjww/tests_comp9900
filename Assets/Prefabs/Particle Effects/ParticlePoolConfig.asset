@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6244ec307e558e648a99774a35f6b2a6, type: 3}
+  m_Name: ParticlePoolConfig
+  m_EditorClassIdentifier: Assembly-CSharp::ParticlePoolConfig
+  defaultPoolSizePerType: 20
+  particleTypes:
+  - id: Protein Denature
+    prefab: {fileID: 1437300955900613625, guid: 0afae1b24bbba66469c7225238cdd9e8, type: 3}
+    poolSize: 0
+  - id: Lipid Snap
+    prefab: {fileID: 8037364450213562904, guid: 2f75a61ffb4ab7f48b1d9d9e746818de, type: 3}
+    poolSize: 0
+  - id: Water Drop
+    prefab: {fileID: 8037364450213562904, guid: 465fd66ea9efa7143958fc51bb6f7600, type: 3}
+    poolSize: 0
+  - id: Water Snap
+    prefab: {fileID: 8037364450213562904, guid: a2cfd3b9e3b3af7479960756658f9e93, type: 3}
+    poolSize: 0

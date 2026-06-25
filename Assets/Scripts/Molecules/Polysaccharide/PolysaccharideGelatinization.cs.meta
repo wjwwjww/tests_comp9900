@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 66dd03ddfe8649d49a2143ae02ecdf47
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - amyloseGelPrefab: {fileID: -958829834564781248, guid: bb328133bf03c704e9db5bd1b6e05442, type: 3}
+  - gelatinizeVideoClip: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
