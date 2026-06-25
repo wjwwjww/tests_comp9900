@@ -26,3 +26,6 @@ MonoBehaviour:
   - id: Water Snap
     prefab: {fileID: 8037364450213562904, guid: a2cfd3b9e3b3af7479960756658f9e93, type: 3}
     poolSize: 0
+  - id: CaramelSmokeBurst
+    prefab: {fileID: 1437300955900613625, guid: d80b09689a567f64c970f017aefe0621, type: 3}
+    poolSize: 5

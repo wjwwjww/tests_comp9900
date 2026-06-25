@@ -7,7 +7,8 @@ public enum ReactionType
     Denaturation,
     PolysaccharideGelatinize,
     ProteinBond,
-    Retrogradation
+    Retrogradation,
+    Caramelisation
 }
 
 public static class ReactionEvents
