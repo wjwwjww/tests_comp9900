@@ -143,13 +143,11 @@ public class Protein : Molecule
             ReactionEvents.Raise(proteinCoagulationSO);
         }
 
-        // 4. 销毁酸分子，防止一个酸分子无限凝固多个蛋白质
         if (acid != null)
         {
             Destroy(acid.gameObject);
         }
 
-        // 5. 销毁当前的“空心线框”蛋白质
         Destroy(gameObject);
     }
 
