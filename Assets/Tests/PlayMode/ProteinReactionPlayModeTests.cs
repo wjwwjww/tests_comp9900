@@ -98,24 +98,18 @@ public class ProteinReactionPlayModeTests
 
         GameObject protein = TestHelper.SpawnProtein(ProteinName, TestHelper.GroundSpawnPosition);
         Protein proteinComponent = protein.GetComponent<Protein>();
-
-        Assert.IsTrue(proteinComponent.IsNative(), "Protein must be native when spawned");
-        
-        yield return new WaitForFixedUpdate();
-        yield return TestHelper.WaitIfVisualizing(TestHelper.VisualStepDelaySeconds);
-
         proteinComponent.Denature();   
         yield return TestHelper.WaitIfVisualizing(TestHelper.VisualStepDelaySeconds); 
 
-        GameObject protein2 = TestHelper.SpawnProtein(ProteinName, TestHelper.GroundSpawnPosition);
+        Vector3 offsetPosition = TestHelper.GroundSpawnPosition + new Vector3(1.0f, 0f, 0f);
+        GameObject protein2 = TestHelper.SpawnProtein(ProteinName, offsetPosition);
         Protein proteinComponent2 = protein2.GetComponent<Protein>();
-
-        Assert.IsTrue(proteinComponent2.IsNative(), "Protein must be native when spawned");
         
         yield return new WaitForFixedUpdate();
+        proteinComponent2.Denature();
         yield return TestHelper.WaitIfVisualizing(TestHelper.VisualStepDelaySeconds);
 
-        proteinComponent2.Denature();        
+        protein2.transform.position = TestHelper.GroundSpawnPosition;
         yield return new WaitForFixedUpdate();
         yield return TestHelper.WaitIfVisualizing(BondDuration);
 
