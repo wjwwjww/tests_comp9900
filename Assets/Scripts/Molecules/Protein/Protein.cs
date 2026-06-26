@@ -6,7 +6,6 @@ using Oculus.Interaction;
 [RequireComponent(typeof(AudioSource))]
 public class Protein : Molecule
 {
-
     [SerializeField] private SkinnedMeshRenderer[] meshes;
 
     [Header("Denaturation Feedback")]
@@ -15,32 +14,41 @@ public class Protein : Molecule
     [SerializeField] private ReactionSO proteinBondSO;
     [SerializeField] private float denatureVolume = 0.8f;
     [SerializeField] private float denaturePitchJitter = 0.05f;
-
     [SerializeField] private Material bondMaterial;
+
+    [Header("Coagulation Feedback")]
+    [SerializeField] private ReactionSO proteinCoagulationSO;
+    [SerializeField] private ParticleSystem coagulationVFXPrefab;
+    [SerializeField] private GameObject solidifiedProteinPrefab;
 
     private State state;
     private bool _denatureFeedbackPlayed;
     private float _denatureWeight;
     private const float INFINITY = Mathf.Infinity;
     private const float threshold = 100f;
+    
     private const string denaturedDesc = "Native protein structure disrupted by thermal energy. Peptide bonds remain intact but tertiary structure is lost.";
     private const string bondedDesc = "Stabilizing intramolecular bonds form between amino acid residues, reinforcing the protein structure. Key interactions are locked in place, representing a folding intermediate or stabilized conformation.";
+    private const string coagulatedDesc = "Protein strands have aggregated into a solid mass due to an acidic environment.";
 
     private enum State
     {
         Native,
         Denatured,
-        Bonding
+        Bonding,
+        Coagulated
     }
-
-
 
     protected override void Awake()
     {
         base.Awake();
         state = State.Native;
-        proteinDenaturationSO.Source = proteinBondSO.Source = gameObject;
+        
+        if (proteinDenaturationSO != null) proteinDenaturationSO.Source = gameObject;
+        if (proteinBondSO != null) proteinBondSO.Source = gameObject;
+        if (proteinCoagulationSO != null) proteinCoagulationSO.Source = gameObject; 
     }
+
     public void SetDenatureWeight(float weight)
     {
         _denatureWeight = weight;
@@ -69,10 +77,8 @@ public class Protein : Molecule
     private void EmitDenatureSteam()
     {
         if (denatureSteamPrefab == null) return;
-
         ParticlePoolManager.TryPlayFromPool(denatureSteamPrefab, GetVisualCenter(), Quaternion.identity);
     }
-
 
     private Vector3 GetVisualCenter()
     {
@@ -95,12 +101,38 @@ public class Protein : Molecule
 
     public void Denature()
     {
-        if (state == State.Denatured) return;
+        if (state == State.Denatured || state == State.Coagulated) return;
         SetDenatured();
         proteinDenaturationSO.Position = transform.position;
         ReactionEvents.Raise(proteinDenaturationSO);
 
         EmitDenatureSteam();
+    }
+
+    public void Coagulate()
+    {
+        if (state == State.Coagulated) return;
+        
+        SetMoleculeSODescription(coagulatedDesc);
+        state = State.Coagulated;
+
+        if (coagulationVFXPrefab != null)
+        {
+            ParticlePoolManager.TryPlayFromPool(coagulationVFXPrefab, GetVisualCenter(), Quaternion.identity);
+        }
+
+        if (proteinCoagulationSO != null)
+        {
+            proteinCoagulationSO.Position = transform.position;
+            ReactionEvents.Raise(proteinCoagulationSO);
+        }
+
+        if (solidifiedProteinPrefab != null)
+        {
+            Instantiate(solidifiedProteinPrefab, transform.position, transform.rotation);
+        }
+
+        Destroy(gameObject);
     }
 
     public bool IsDenatured()
@@ -129,6 +161,7 @@ public class Protein : Molecule
     {
         return state == State.Native;
     }
+
     public override string GetState()
     {
         return state.ToString();   
@@ -136,6 +169,12 @@ public class Protein : Molecule
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.TryGetComponent<Acid>(out Acid acid) && state != State.Coagulated)
+        {
+            Coagulate();
+            return;
+        }
+
         if (!IsDenatured() || IsBonded()) return;
         if (other.TryGetComponent<Protein>(out Protein otherProtein) && otherProtein.IsDenatured())
         {
@@ -143,7 +182,6 @@ public class Protein : Molecule
                 Bonding(otherProtein);
         }
     }
-
 
     private void Bonding(Protein other)
     {
@@ -170,6 +208,10 @@ public class Protein : Molecule
         Collider otherCol = other.GetComponent<Collider>();
         Physics.IgnoreCollision(myCol, otherCol, true);
     }
+
     [ContextMenu("Test Denature")]
     private void TestDenature() => Denature();
+
+   // [ContextMenu("Test Coagulate")]
+   // private void TestCoagulate() => Coagulate();
 }
