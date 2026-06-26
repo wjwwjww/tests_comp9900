@@ -155,4 +155,33 @@ public class ProteinReactionPlayModeTests
         Assert.IsTrue(proteinComponent.IsBonded() && proteinComponent2.IsBonded(), "Protein must be bonded as both of them are denatured and collided each other");
         yield return TestHelper.WaitIfVisualizing(TestHelper.VisualStepDelaySeconds);
     }
+
+    [UnityTest]
+    public IEnumerator ProteinCoagulatesWhenAcidCollides()
+    {
+        TestHelper.CreateVisualRig();
+        TestHelper.CreateTestGround();
+        yield return TestHelper.WaitIfVisualizing(TestHelper.VisualStepDelaySeconds);
+
+        GameObject protein = TestHelper.SpawnProtein(ProteinName, TestHelper.GroundSpawnPosition);
+        Protein proteinComponent = protein.GetComponent<Protein>();
+
+        Assert.IsTrue(proteinComponent.IsNative(), "Protein must be native when spawned");
+        
+        yield return new WaitForFixedUpdate();
+        yield return TestHelper.WaitIfVisualizing(TestHelper.VisualStepDelaySeconds);
+
+        Vector3 acidSpawnPos = TestHelper.GroundSpawnPosition + new Vector3(0f, 1.0f, 0f);
+        GameObject acid = TestHelper.SpawnAcid("Test_Acid", acidSpawnPos);
+
+        yield return new WaitForFixedUpdate();
+        yield return TestHelper.WaitIfVisualizing(2.0f);
+
+        Assert.IsTrue(protein == null, "The original protein GameObject must be destroyed after coagulation");
+
+        SolidifiedProteinBlock solidifiedBlock = UnityEngine.Object.FindObjectOfType<SolidifiedProteinBlock>();
+        Assert.NotNull(solidifiedBlock, "A solidified protein block should be spawned after coagulation");
+
+        yield return TestHelper.WaitIfVisualizing(TestHelper.VisualStepDelaySeconds);
+    }
 }

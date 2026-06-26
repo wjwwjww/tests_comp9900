@@ -376,6 +376,9 @@ MonoBehaviour:
   denatureVolume: 0.8
   denaturePitchJitter: 0.05
   bondMaterial: {fileID: 2100000, guid: cc0f76d76d4974f329f5fdbae331c5f9, type: 2}
+  proteinCoagulationSO: {fileID: 11400000, guid: 6075c07b7da2f4289b0dbfbda6519a86, type: 2}
+  coagulationVFXPrefab: {fileID: 1658235328892667871, guid: ed9158123757f428db2469ea60a19bec, type: 3}
+  solidifiedProteinPrefab: {fileID: 7781431051472310647, guid: b8b92b572d9df6b42b1870c5bf997f72, type: 3}
 --- !u!114 &-6326226417449385442
 MonoBehaviour:
   m_ObjectHideFlags: 0
