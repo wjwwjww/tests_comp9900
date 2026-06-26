@@ -126,9 +126,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: SolidifiedProtein
       objectReference: {fileID: 0}
+    - target: {fileID: 1157933392391325112, guid: 58768c36ec53ccc458fa9c93f7e84978, type: 3}
+      propertyPath: m_TagString
+      value: SolidifiedProtein
+      objectReference: {fileID: 0}
     - target: {fileID: 1726742560893540809, guid: 58768c36ec53ccc458fa9c93f7e84978, type: 3}
       propertyPath: protein
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1970921758336491266, guid: 58768c36ec53ccc458fa9c93f7e84978, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 1970921758336491266, guid: 58768c36ec53ccc458fa9c93f7e84978, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 1970921758336491266, guid: 58768c36ec53ccc458fa9c93f7e84978, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.04
       objectReference: {fileID: 0}
     - target: {fileID: 1970921758336491266, guid: 58768c36ec53ccc458fa9c93f7e84978, type: 3}
       propertyPath: m_LocalPosition.x

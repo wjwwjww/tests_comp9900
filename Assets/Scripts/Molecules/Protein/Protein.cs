@@ -109,27 +109,43 @@ public class Protein : Molecule
         EmitDenatureSteam();
     }
 
-    public void Coagulate()
+
+    public void Coagulate(Acid acid = null)
     {
         if (state == State.Coagulated) return;
         
         SetMoleculeSODescription(coagulatedDesc);
         state = State.Coagulated;
 
+        Vector3 spawnPos = transform.position;
+        Quaternion spawnRot = transform.rotation;
+
         if (coagulationVFXPrefab != null)
         {
             ParticlePoolManager.TryPlayFromPool(coagulationVFXPrefab, GetVisualCenter(), Quaternion.identity);
         }
 
-        if (proteinCoagulationSO != null)
-        {
-            proteinCoagulationSO.Position = transform.position;
-            ReactionEvents.Raise(proteinCoagulationSO);
-        }
+        GameObject solidifiedObj = null;
 
         if (solidifiedProteinPrefab != null)
         {
-            Instantiate(solidifiedProteinPrefab, transform.position, transform.rotation);
+            solidifiedObj = Instantiate(solidifiedProteinPrefab, spawnPos, spawnRot);
+            StateManager.Instance?.RegisterMolecule(solidifiedObj);
+        }
+
+        if (proteinCoagulationSO != null)
+        {
+            proteinCoagulationSO.Position = spawnPos;
+            proteinCoagulationSO.Source = solidifiedObj;
+            proteinCoagulationSO.Participants = solidifiedObj != null 
+                ? new GameObject[] { solidifiedObj } 
+                : null;
+            ReactionEvents.Raise(proteinCoagulationSO);
+        }
+
+        if (acid != null)
+        {
+            Destroy(acid.gameObject);
         }
 
         Destroy(gameObject);
@@ -171,7 +187,7 @@ public class Protein : Molecule
     {
         if (other.TryGetComponent<Acid>(out Acid acid) && state != State.Coagulated)
         {
-            Coagulate();
+            Coagulate(acid);
             return;
         }
 
@@ -212,6 +228,6 @@ public class Protein : Molecule
     [ContextMenu("Test Denature")]
     private void TestDenature() => Denature();
 
-   // [ContextMenu("Test Coagulate")]
+  //  [ContextMenu("Test Coagulate")]
    // private void TestCoagulate() => Coagulate();
 }

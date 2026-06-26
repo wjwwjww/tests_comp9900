@@ -16,6 +16,7 @@ public static class TestHelper
     private const string HeatZonePrefabAssetPath = "Assets/Prefabs/Zone/HeatZone.prefab";
     private const string FridgePrefabAssetPath = "Assets/Prefabs/Zone/Fridge.prefab";
     private const string PolysaccharidePrefabAssetPath = "Assets/Prefabs/Molecules/Polysaccharide.prefab";
+    private const string AcidPrefabAssetPath = "Assets/Prefabs/Molecules/Acid.prefab";
 	private const float GravityY = -9.81f;
 	public static readonly Vector3 PhysicsGravity = new Vector3(0f, GravityY, 0f);
 	private static readonly Vector3 GroundScale = new Vector3(6f, 1f, 6f);
@@ -172,6 +173,13 @@ public static class TestHelper
         GameObject fridge = InstantiatePrefabForTest(objectName, FridgePrefabAssetPath, position);
         Assert.NotNull(fridge.GetComponent<FridgeZone>(), "Failed to ensure Fridge Zone component on test object.");
         return fridge;
+    }
+
+    public static GameObject SpawnAcid(string objectName, Vector3 position)
+    {
+        GameObject acid = InstantiatePrefabForTest(objectName, AcidPrefabAssetPath, position);
+        Assert.NotNull(acid.GetComponent<Acid>(), "Failed to ensure Acid component on test object.");
+        return acid;
     }
 
 	private static GameObject InstantiatePrefabForTest(string objectName, string assetPath, Vector3 position)
