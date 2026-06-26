@@ -8,6 +8,9 @@ TagManager:
   - Water
   - Hand
   - Fridge
+  - Sugar
+  - Caramel
+  - Acid
   layers:
   - Default
   - TransparentFX

@@ -371,7 +371,6 @@ MonoBehaviour:
   - {fileID: 3327654338431942182}
   - {fileID: 1823247135714467555}
   denatureSteamPrefab: {fileID: 1437300955900613625, guid: 0afae1b24bbba66469c7225238cdd9e8, type: 3}
-  denatureClip: {fileID: 8300000, guid: 49afcbc4f5a8c684d8bdd761ae54b231, type: 3}
   proteinDenaturationSO: {fileID: 11400000, guid: c7c7957e4c4fe4492b1287e15dfaed11, type: 2}
   proteinBondSO: {fileID: 11400000, guid: 7ed400a7d1bda4a619b9d0368e9488f6, type: 2}
   denatureVolume: 0.8

@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46ab925766b6f4595a85920bcf4d2135, type: 3}
   m_Name: AcidSO
   m_EditorClassIdentifier: GameMode::MoleculeSO
-  name: 
-  type: 
+  name: Acid
+  type: Acid
   description: 
