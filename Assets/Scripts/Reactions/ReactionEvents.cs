@@ -8,7 +8,8 @@ public enum ReactionType
     PolysaccharideGelatinize,
     ProteinBond,
     Retrogradation,
-    Caramelisation
+    Caramelisation,
+    ProteinCoagulation    //add reaction for protein and acid
 }
 
 public static class ReactionEvents
