@@ -175,7 +175,7 @@ public class ProteinReactionPlayModeTests
 
         SolidifiedProteinBlock solidifiedBlock = UnityEngine.Object.FindObjectOfType<SolidifiedProteinBlock>();
         Assert.NotNull(solidifiedBlock, "A solidified protein block should be spawned after coagulation");
-
+        solidifiedBlock.gameObject.name = TestHelper.TestObjectPrefix + solidifiedBlock.gameObject.name;
         yield return TestHelper.WaitIfVisualizing(TestHelper.VisualStepDelaySeconds);
     }
 }
