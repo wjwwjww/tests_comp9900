@@ -13,10 +13,12 @@ public static class TestHelper
 	private const string LipidPrefabAssetPath = "Assets/Prefabs/Molecules/Lipid.prefab";
     private const string WaterPrefabAssetPath = "Assets/Prefabs/Molecules/Water.prefab";
     private const string ProteinPrefabAssetPath = "Assets/Prefabs/Molecules/Protein.prefab";
+    private const string SugarPrefabAssetPath = "Assets/Prefabs/Molecules/Sugar.prefab";
     private const string HeatZonePrefabAssetPath = "Assets/Prefabs/Zone/HeatZone.prefab";
     private const string FridgePrefabAssetPath = "Assets/Prefabs/Zone/Fridge.prefab";
     private const string PolysaccharidePrefabAssetPath = "Assets/Prefabs/Molecules/Polysaccharide.prefab";
     private const string AcidPrefabAssetPath = "Assets/Prefabs/Molecules/Acid.prefab";
+    private const string VfxControllerPrefabAssetPath = "Assets/Prefabs/Particle Effects/VFX Controller.prefab";
 	private const float GravityY = -9.81f;
 	public static readonly Vector3 PhysicsGravity = new Vector3(0f, GravityY, 0f);
 	private static readonly Vector3 GroundScale = new Vector3(6f, 1f, 6f);
@@ -42,6 +44,7 @@ public static class TestHelper
     public const string HeatZoneTypeName = "HeatZone";
     public const string PolysaccharideTypeName = "Polysaccharide";
 	public const string ProteinTypeName = "Protein";
+    public const string SugarTypeName = "Sugar";
 	public const string LipidTypeName = "Lipid";
     public const string WaterTypeName = "Water";
     public const string AmyloseGelTypeName = "AmyloseGel";
@@ -147,6 +150,14 @@ public static class TestHelper
         return protein;
     }
 
+    public static GameObject SpawnSugar(string objectName, Vector3 position)
+    {
+        GameObject sugar = InstantiatePrefabForTest(objectName, SugarPrefabAssetPath, position);
+        Assert.NotNull(sugar.GetComponent<Sugar>(), "Failed to ensure Sugar component on test object.");
+        Assert.NotNull(sugar.GetComponent<SugarCaramelisation>(), "Failed to ensure SugarCaramelisation component on test object.");
+        return sugar;
+    }
+
     public static GameObject SpawnEmulsifier(string objectName, Vector3 position)
     {
         GameObject emulsifier = InstantiatePrefabForTest(objectName, EmulsifierPrefabAssetPath, position);
@@ -180,6 +191,27 @@ public static class TestHelper
         GameObject acid = InstantiatePrefabForTest(objectName, AcidPrefabAssetPath, position);
         Assert.NotNull(acid.GetComponent<Acid>(), "Failed to ensure Acid component on test object.");
         return acid;
+    }
+
+    public static GameObject SpawnVfxController(string objectName)
+    {
+        if (ParticlePoolManager.Instance != null)
+        {
+            return ParticlePoolManager.Instance.gameObject;
+        }
+
+#if UNITY_EDITOR
+        GameObject prefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(VfxControllerPrefabAssetPath);
+        Assert.NotNull(prefab, $"Could not load prefab at path: {VfxControllerPrefabAssetPath}");
+
+        GameObject instance = UnityEngine.Object.Instantiate(prefab, Vector3.zero, Quaternion.identity);
+        instance.name = objectName;
+        Assert.NotNull(instance.GetComponentInChildren<ParticlePoolManager>(), "Failed to ensure ParticlePoolManager on test VFX controller.");
+        return instance;
+#else
+        Assert.Fail($"This PlayMode test requires editor asset loading for prefab path: {VfxControllerPrefabAssetPath}");
+        return null;
+#endif
     }
 
 	private static GameObject InstantiatePrefabForTest(string objectName, string assetPath, Vector3 position)
