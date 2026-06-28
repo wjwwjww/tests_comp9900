@@ -9,7 +9,8 @@ public enum ReactionType
     ProteinBond,
     Retrogradation,
     Caramelisation,
-    ProteinCoagulation    //add reaction for protein and acid
+    ProteinCoagulation,    //add reaction for protein and acid
+    Maillard // add reaction for maillard
 }
 
 public static class ReactionEvents
