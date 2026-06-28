@@ -51331,6 +51331,56 @@ Transform:
   - {fileID: 1188494647}
   m_Father: {fileID: 1725829184}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &294371576
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 294371578}
+  - component: {fileID: 294371577}
+  m_Layer: 0
+  m_Name: MaillardReactionManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &294371577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 294371576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e64b26d95289546d1ae58bc9a9372c43, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: GameMode::MaillardReactionManager
+  maillardSO: {fileID: 11400000, guid: 6ddca682374684543a3e7bc025d53191, type: 2}
+  maillardProductPrefab: {fileID: 931088508870241692, guid: e0a21db0f08894ed6b18268a6c10a5d1, type: 3}
+  smokePrefab: {fileID: 1437300955900613625, guid: d80b09689a567f64c970f017aefe0621, type: 3}
+  hideReactantsAfterReaction: 1
+  detectionRadius: 5
+  scanInterval: 0.2
+--- !u!4 &294371578
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 294371576}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4.10575, y: -0, z: -0.75857}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -51348,3 +51398,4 @@ SceneRoots:
   - {fileID: 75165638}
   - {fileID: 1206698254}
   - {fileID: 798636187}
+  - {fileID: 294371578}
