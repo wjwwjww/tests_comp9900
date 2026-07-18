@@ -16,19 +16,21 @@ public class ReactionVideo : MonoBehaviour
 
     private bool isStreaming;
 
-    void Awake()
-    {
-
-    }
-    void Start() 
+    void Start()
     {
         isStreaming = false;
-        videoPlayer.loopPointReached += HandleVideoEnd;
-        closeButton.onClick.AddListener(Hide);
+
+        if (videoPlayer != null)
+            videoPlayer.loopPointReached += HandleVideoEnd;
+
+        if (closeButton != null)
+            closeButton.onClick.AddListener(Hide);
+
         gameObject.SetActive(false);
     }
 
     private void OnEnable() => ReactionEvents.Occurred += OnReactionOccurred;
+    private void OnDisable() => ReactionEvents.Occurred -= OnReactionOccurred;
 
     private void OnReactionOccurred(ReactionSO evt)
     {
@@ -37,7 +39,9 @@ public class ReactionVideo : MonoBehaviour
 
     void OnDestroy() 
     {
-        videoPlayer.loopPointReached -= HandleVideoEnd;
+        if (videoPlayer != null)
+            videoPlayer.loopPointReached -= HandleVideoEnd;
+
         ReactionEvents.Occurred -= OnReactionOccurred;
     }
 
@@ -48,6 +52,9 @@ public class ReactionVideo : MonoBehaviour
 
     private void SetPosition()
     {
+        if (vrCamera == null)
+            return;
+
         Vector3 pos = vrCamera.position + vrCamera.forward * distance;
         pos.y += yOffset;
         transform.position = pos;
@@ -56,8 +63,9 @@ public class ReactionVideo : MonoBehaviour
 
     public void Play(VideoClip clip)
     {
-        if (isStreaming || clip == null) 
+        if (isStreaming || clip == null || videoPlayer == null)
             return;
+
         videoPlayer.clip = clip;
         Show();
     }
@@ -66,14 +74,17 @@ public class ReactionVideo : MonoBehaviour
     {
         isStreaming = true;
         SetPosition();
-        videoPlayer.Play();
         gameObject.SetActive(true);
+        videoPlayer.Play();
     }
 
     public void Hide()
     {
         isStreaming = false;
-        videoPlayer.Stop();
+
+        if (videoPlayer != null)
+            videoPlayer.Stop();
+
         gameObject.SetActive(false);
     }
 }

@@ -37,7 +37,7 @@ public class ProteinReactionPlayModeTests
     {
         foreach (GameObject go in UnityEngine.Object.FindObjectsOfType<GameObject>())
         {
-            if (go.name.StartsWith(TestHelper.TestObjectPrefix, StringComparison.Ordinal))
+            if (go.name.StartsWith(TestHelper.TestObjectPrefix, StringComparison.Ordinal) || go.name.Contains("SolidifiedProtein"))
             {
                 UnityEngine.Object.DestroyImmediate(go);
             }
@@ -74,13 +74,14 @@ public class ProteinReactionPlayModeTests
         yield return TestHelper.WaitIfVisualizing(TestHelper.VisualStepDelaySeconds);
 
         GameObject heatZone = TestHelper.SpawnHeatZone(HeatZoneName, TestHelper.FallingSpawnPosition);
+        ApplyConstraints(heatZone);
 
         yield return new WaitForFixedUpdate();
         yield return TestHelper.WaitIfVisualizing(TestHelper.VisualStepDelaySeconds);
 
         GameObject protein = TestHelper.SpawnProtein(ProteinName, FallingProteinSpawnPosition);
+        ApplyConstraints(protein);
         Protein proteinComponent = protein.GetComponent<Protein>();
-
         
         yield return new WaitForFixedUpdate();
         yield return TestHelper.WaitIfVisualizing(HeatingDuration);
@@ -125,18 +126,26 @@ public class ProteinReactionPlayModeTests
         yield return TestHelper.WaitIfVisualizing(TestHelper.VisualStepDelaySeconds);
 
         GameObject heatZone = TestHelper.SpawnHeatZone(HeatZoneName, TestHelper.FallingSpawnPosition);
+        ApplyConstraints(heatZone);
 
         yield return new WaitForFixedUpdate();
         yield return TestHelper.WaitIfVisualizing(TestHelper.VisualStepDelaySeconds);
 
         GameObject protein = TestHelper.SpawnProtein(ProteinName, FallingProteinSpawnPosition);
+        ApplyConstraints(protein);
         Protein proteinComponent = protein.GetComponent<Protein>();
 
         GameObject protein2 = TestHelper.SpawnProtein(ProteinName, FallingProteinSpawnPosition2);
+        ApplyConstraints(protein2);
         Protein proteinComponent2 = protein2.GetComponent<Protein>();
         
         yield return new WaitForFixedUpdate();
         yield return TestHelper.WaitIfVisualizing(HeatingDuration);
+
+        Rigidbody rb1 = protein.GetComponent<Rigidbody>();
+        if (rb1 != null) rb1.constraints = RigidbodyConstraints.None;
+        Rigidbody rb2 = protein2.GetComponent<Rigidbody>();
+        if (rb2 != null) rb2.constraints = RigidbodyConstraints.None;
 
         heatZone.transform.position = OtherPosition;
         protein.transform.position = AfterDenaturedSpawnPosition;
@@ -175,7 +184,18 @@ public class ProteinReactionPlayModeTests
 
         SolidifiedProteinBlock solidifiedBlock = UnityEngine.Object.FindObjectOfType<SolidifiedProteinBlock>();
         Assert.NotNull(solidifiedBlock, "A solidified protein block should be spawned after coagulation");
-        solidifiedBlock.gameObject.name = TestHelper.TestObjectPrefix + solidifiedBlock.gameObject.name;
+
         yield return TestHelper.WaitIfVisualizing(TestHelper.VisualStepDelaySeconds);
     }
+
+    private void ApplyConstraints(GameObject go)
+    {
+        if (go == null) return;
+        Rigidbody rb = go.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+        }
+    }
 }
+

@@ -60,7 +60,7 @@ public class PolysaccharidePlayModeTests
         yield return new WaitForFixedUpdate();
         yield return TestHelper.WaitIfVisualizing(TestHelper.VisualStepDelaySeconds);
     
-        TestHelper.SpawnWater(PolysaccharideName, TestHelper.FallingSpawnPosition);
+        GameObject water = TestHelper.SpawnWater(PolysaccharideName, TestHelper.FallingSpawnPosition);
         yield return TestHelper.WaitIfVisualizing(AbsorbDuration);
 
         Assert.IsTrue(TestHelper.FindTestObjectsWithComponent(TestHelper.FindType(TestHelper.WaterTypeName)).Length == ExpectedTotalWaterAfterSwelling, "Polysaccharide should absorb the water!");
@@ -75,6 +75,7 @@ public class PolysaccharidePlayModeTests
         yield return TestHelper.WaitIfVisualizing(TestHelper.VisualStepDelaySeconds);
 
         GameObject polysaccharide = TestHelper.SpawnPolysaccharide(PolysaccharideName, TestHelper.FallingSpawnPosition);
+        ApplyConstraints(polysaccharide);
         PolysaccharideSwelling polysaccharideSwelling = polysaccharide.GetComponent<PolysaccharideSwelling>();
 
         Assert.NotNull(polysaccharideSwelling, "Polysaccharide must have polysaccharide script attached!");
@@ -82,13 +83,15 @@ public class PolysaccharidePlayModeTests
         yield return new WaitForFixedUpdate();
         yield return TestHelper.WaitIfVisualizing(TestHelper.VisualStepDelaySeconds);
     
-        TestHelper.SpawnWater(PolysaccharideName, TestHelper.FallingSpawnPosition);
+        GameObject water = TestHelper.SpawnWater(PolysaccharideName, TestHelper.FallingSpawnPosition);
+        ApplyConstraints(water);
 
         yield return new WaitForFixedUpdate();
         yield return TestHelper.WaitIfVisualizing(AbsorbDuration);
         Assert.IsTrue(TestHelper.FindTestObjectsWithComponent(TestHelper.FindType(TestHelper.WaterTypeName)).Length == ExpectedTotalWaterAfterSwelling, "Water should disappear because it's absorbed to the polysaccharide");
 
         GameObject heatZone = TestHelper.SpawnHeatZone(HeatZoneName, TestHelper.FallingSpawnPosition);
+        ApplyConstraints(heatZone);
         yield return new WaitForFixedUpdate();
         yield return TestHelper.WaitIfVisualizing(AbsorbDuration);
 
@@ -115,7 +118,7 @@ public class PolysaccharidePlayModeTests
         yield return new WaitForFixedUpdate();
         yield return TestHelper.WaitIfVisualizing(TestHelper.VisualStepDelaySeconds);
     
-        TestHelper.SpawnWater(PolysaccharideName, TestHelper.FallingSpawnPosition);
+        GameObject water = TestHelper.SpawnWater(PolysaccharideName, TestHelper.FallingSpawnPosition);
         yield return TestHelper.WaitIfVisualizing(AbsorbDuration);
 
         Assert.IsTrue(TestHelper.FindTestObjectsWithComponent(TestHelper.FindType(TestHelper.WaterTypeName)).Length == ExpectedTotalWaterAfterSwelling, "Polysaccharide should absorb the water");
@@ -144,5 +147,15 @@ public class PolysaccharidePlayModeTests
     private int FindTotalAmyloseGel()
     {
         return UnityEngine.Object.FindObjectsByType<AmyloseGel>(FindObjectsSortMode.None).Length;
+    }
+
+    private void ApplyConstraints(GameObject go)
+    {
+        if (go == null) return;
+        Rigidbody rb = go.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+        }
     }
 }

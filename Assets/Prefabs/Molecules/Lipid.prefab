@@ -212,6 +212,12 @@ MonoBehaviour:
   moleculeSO: {fileID: 11400000, guid: f84f0a5fb43c64f468f981a1cce0df89, type: 2}
   lipidMergeVideoClip: {fileID: 0}
   lipidMergeSO: {fileID: 11400000, guid: 0b03f6fa89f904dd09de5163e920f957, type: 2}
+  oxidisedLipidPrefab: {fileID: 7400072036306188226, guid: 5c279d418befc5841bc3a71d88d3f4f1, type: 3}
+  lipidOxidationSO: {fileID: 11400000, guid: 4c476f8c9e014029aafccf29910ed10c, type: 2}
+  normalOxidationDuration: 10
+  heatedOxidationDuration: 3
+  lipidRenderer: {fileID: 8717254385135901756}
+  oxidisedLipidMaterial: {fileID: 2100000, guid: 714d9f91af7250b43aa0469719bf9f0c, type: 2}
 --- !u!114 &-7217494026157217881
 MonoBehaviour:
   m_ObjectHideFlags: 0

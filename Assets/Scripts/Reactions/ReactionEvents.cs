@@ -10,7 +10,11 @@ public enum ReactionType
     Retrogradation,
     Caramelisation,
     ProteinCoagulation,    //add reaction for protein and acid
-    Maillard // add reaction for maillard
+    Maillard, // add reaction for maillard
+    LipidOxidation,
+    Fermentation,
+    EnzymaticBrowning,
+    SugarCrystallization
 }
 
 public static class ReactionEvents

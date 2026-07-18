@@ -50,6 +50,12 @@ public class EmulsifierReactionPlayModeTests
         yield return TestHelper.WaitIfVisualizing(TestHelper.VisualStepDelaySeconds);
 
         GameObject emulsifier = TestHelper.SpawnEmulsifier(EmulsifierName, TestHelper.FallingSpawnPosition);
+        Rigidbody emulsifierRb = emulsifier.GetComponent<Rigidbody>();
+        if (emulsifierRb != null)
+        {
+            emulsifierRb.constraints = RigidbodyConstraints.FreezeRotation;
+        }
+
         yield return TestHelper.WaitIfVisualizing(SpawnSetUpDuration);
 
         GameObject water = TestHelper.SpawnWater(WaterObjectName, TestHelper.FallingSpawnPosition + WaterSpawnOffset);
@@ -66,6 +72,12 @@ public class EmulsifierReactionPlayModeTests
         yield return TestHelper.WaitIfVisualizing(TestHelper.VisualStepDelaySeconds);
 
         GameObject emulsifier = TestHelper.SpawnEmulsifier(EmulsifierName, TestHelper.FallingSpawnPosition);
+        Rigidbody emulsifierRb = emulsifier.GetComponent<Rigidbody>();
+        if (emulsifierRb != null)
+        {
+            emulsifierRb.constraints = RigidbodyConstraints.FreezeRotation;
+        }
+
         yield return TestHelper.WaitIfVisualizing(SpawnSetUpDuration);
 
         GameObject lipid = TestHelper.SpawnLipid(LipidName, TestHelper.FallingSpawnPosition + LipidSpawnOffset);
@@ -82,6 +94,12 @@ public class EmulsifierReactionPlayModeTests
         yield return TestHelper.WaitIfVisualizing(TestHelper.VisualStepDelaySeconds);
 
         GameObject emulsifier = TestHelper.SpawnEmulsifier(EmulsifierName, TestHelper.FallingSpawnPosition);
+        Rigidbody emulsifierRb = emulsifier.GetComponent<Rigidbody>();
+        if (emulsifierRb != null)
+        {
+            emulsifierRb.constraints = RigidbodyConstraints.FreezeRotation;
+        }
+
         yield return TestHelper.WaitIfVisualizing(SpawnSetUpDuration);
 
         GameObject water = TestHelper.SpawnWater(WaterObjectName, TestHelper.FallingSpawnPosition + WaterSpawnOffset);

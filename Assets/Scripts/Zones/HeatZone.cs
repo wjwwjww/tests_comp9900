@@ -22,9 +22,17 @@ public class HeatZone : Zone
         if (_proteinsInZone.Count == 0) return;
 
         PerformanceManager pm = PerformanceManager.Instance;
-        if (pm != null && !pm.ShouldRunThrottled(ref _throttleAccumulator))
+        float elapsed = Time.deltaTime;
+        if (pm != null)
         {
-            return;
+            _throttleAccumulator += Time.deltaTime;
+            float interval = Mathf.Max(0f, pm.ActiveTriggerInterval);
+            if (interval > 0f && _throttleAccumulator < interval)
+            {
+                return;
+            }
+            elapsed = _throttleAccumulator;
+            _throttleAccumulator = 0f;
         }
 
         float weightIncreasePerSecond = threshold / denatureDuration;
@@ -47,7 +55,7 @@ public class HeatZone : Zone
                 continue;
             }
 
-            float newWeight = Mathf.Min(currentWeight + weightIncreasePerSecond * Time.deltaTime, threshold);
+            float newWeight = Mathf.Min(currentWeight + weightIncreasePerSecond * elapsed, threshold);
             _proteinsInZone[protein] = newWeight;
             protein.SetDenatureWeight(newWeight);
 

@@ -24,6 +24,13 @@ public class StateManager : MonoBehaviour
         spawnedObjects.Add(obj);
     }
 
+    public void UnregisterMolecule(GameObject obj)
+    {
+        if (obj == null) return;
+
+        spawnedObjects.Remove(obj);
+    }
+
     public void DestroyAll()
     {
         foreach (GameObject obj in spawnedObjects)
