@@ -2,7 +2,7 @@
 
 The automated suite contains 26 Unity PlayMode tests under `Assets/Tests/PlayMode/`. These tests cover reaction behaviour, negative cases, chemistry UI and quiz interactions, and reaction video controls.
 
-The reaction tests spawn and move objects using repeatable positions, timings, and inputs. The UI tests invoke the same Unity `Button.onClick` events used by the application. Chemistry panel steps remain visible for 0.8–1 second, quiz feedback and answer colours are shown question by question, the final score remains visible for 2 seconds, and the valid reaction video remains open for 2 seconds before closing. Manual end-to-end testing on Meta Quest 3 remains necessary for hand tracking, controller/ray interaction, mixed-reality placement, visual readability, and device performance.
+The reaction tests spawn and move objects using repeatable positions, timings, and inputs. The UI tests invoke the same Unity `Button.onClick` events used by the application. Manual end-to-end testing on Meta Quest 3 remains necessary for hand tracking, controller/ray interaction, mixed-reality placement, visual readability, and device performance.
 
 ### Running the automated tests
 
