@@ -1,8 +1,8 @@
 ## Automated PlayMode Test Documentation
 
-The automated suite contains 33 Unity PlayMode tests under `Assets/Tests/PlayMode/`. These tests cover reaction behaviour, negative cases, chemistry UI and quiz interactions, reaction video controls, workspace clearing, and performance safeguard logic.
+The automated suite contains 26 Unity PlayMode tests under `Assets/Tests/PlayMode/`. These tests cover reaction behaviour, negative cases, chemistry UI and quiz interactions, and reaction video controls.
 
-The reaction tests spawn and move objects using repeatable positions, timings, and inputs. The UI tests invoke the same Unity `Button.onClick` events used by the application. Manual end-to-end testing on Meta Quest 3 remains necessary for hand tracking, controller/ray interaction, mixed-reality placement, visual readability, and device performance.
+The reaction tests spawn and move objects using repeatable positions, timings, and inputs. The UI tests invoke the same Unity `Button.onClick` events used by the application. Chemistry panel steps remain visible for 0.8–1 second, quiz feedback and answer colours are shown question by question, the final score remains visible for 2 seconds, and the valid reaction video remains open for 2 seconds before closing. Manual end-to-end testing on Meta Quest 3 remains necessary for hand tracking, controller/ray interaction, mixed-reality placement, visual readability, and device performance.
 
 ### Running the automated tests
 
@@ -10,7 +10,7 @@ The reaction tests spawn and move objects using repeatable positions, timings, a
 2. Open `Window > General > Test Runner`.
 3. Select the `PlayMode` tab.
 4. Select `3900-Project` and choose `Run All`.
-5. Confirm that all 33 tests pass, then use `Export Results` to save the XML evidence used for submission.
+5. Confirm that all 26 tests pass, then use `Export Results` to save the XML evidence used for submission.
 
 The suite currently requires the Unity Editor because test helpers load project prefabs and video assets through `UnityEditor.AssetDatabase`.
 
@@ -105,28 +105,6 @@ Tests reaction video visibility, clip selection, positioning, and stopping.
 - `Play_WithNullClip_RemainsHidden` - A missing clip does not open the video panel.
 
 - `PlayAndHide_WithValidClip_UpdatesVisibilityClipAndPosition` - A valid clip opens and positions the panel; Hide stops playback and closes it.
-
-### StateManagerPlayModeTests.cs
-
-Tests the Clear/Reset object lifecycle.
-
-- `DestroyAll_DestroysEveryRegisteredObject` - Clear destroys every object registered with `StateManager`.
-
-- `UnregisterMolecule_PreventsObjectFromBeingCleared` - An explicitly unregistered object is retained.
-
-- `MoleculeSelectionPanelClear_DelegatesToStateManager` - The selection panel's Clear action delegates to `StateManager` and removes registered molecules.
-
-### PerformanceManagerPlayModeTests.cs
-
-Tests performance defaults, safeguard transitions, throttling, metrics, and mode events.
-
-- `Awake_InitializesNormalModeSignals` - Startup uses Normal mode and its default optimization signals.
-
-- `SetMode_UpdatesOptimizationSignalsAndRaisesOneEventPerChange` - Mode changes update gaze/trigger settings and emit one event per change.
-
-- `EvaluateMode_EntersAndLeavesSafeguardAfterThresholdsAreMet` - Sustained bad/good frame times enter and leave Safeguard mode.
-
-- `ThrottlingAndResetMetrics_ApplyConfiguredLimits` - Gaze/trigger throttling and runtime metric reset use the configured values.
 
 ## End-to-end Test Documentation
 
