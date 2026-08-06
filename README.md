@@ -1,14 +1,28 @@
-## Unit and Integration Test Documentation
+## Automated PlayMode Test Documentation
 
-Unit testing is done through Unity PlayMode tests covering all core molecule reactions.
-All the test files are located in Assets/Tests/.
-In addition to unit testing, we rigorously did integration and end-to-end testing by manually running the sandbox through our VR headset, testing all combinations of molecules, placements, stress testing, etc, from early development to the current production-ready stage. Making sure that what our end user will receive is of quality.
+The automated suite contains 33 Unity PlayMode tests under `Assets/Tests/PlayMode/`. These tests cover reaction behaviour, negative cases, chemistry UI and quiz interactions, reaction video controls, workspace clearing, and performance safeguard logic.
 
-Unity PlayMode tests made it so that we can spawn molecules, move them, all automated with scripts. The molecules’ positions, movements, and inputs are the exact same every time. We just need to monitor to see if the correct reaction happens.
+The reaction tests spawn and move objects using repeatable positions, timings, and inputs. The UI tests invoke the same Unity `Button.onClick` events used by the application. Manual end-to-end testing on Meta Quest 3 remains necessary for hand tracking, controller/ray interaction, mixed-reality placement, visual readability, and device performance.
+
+### Running the automated tests
+
+1. Open the project with Unity 6000.3.10f1.
+2. Open `Window > General > Test Runner`.
+3. Select the `PlayMode` tab.
+4. Select `3900-Project` and choose `Run All`.
+5. Confirm that all 33 tests pass, then use `Export Results` to save the XML evidence used for submission.
+
+The suite currently requires the Unity Editor because test helpers load project prefabs and video assets through `UnityEditor.AssetDatabase`.
+
+### CaramelisationPlayModeTests.cs
+
+Tests heat-driven sugar caramelisation and reaction feedback.
+
+- `SugarInHeatZone_CreatesCaramelAndRaisesReactionEvent` - Sugar in a heat zone creates caramel, removes the sugar, and raises the caramelisation event.
 
 ### EmulsifierReactionPlayModeTests.cs
 
-#### Tests that emulsifier molecules correctly bind to the right partners.
+Tests that emulsifier molecules correctly bind to the right partners.
 
 - EmulsifierHydrophilicAttached - A water molecule snaps onto the hydrophilic end of an emulsifier
 
@@ -16,9 +30,25 @@ Unity PlayMode tests made it so that we can spawn molecules, move them, all auto
 
 - EmulsifierHydrophobicAndHydrophobicAttached - Both a water and a lipid molecule attach to their correct ends at the same time
 
+### FermentationPlayModeTests.cs
+
+Tests fermentation products and a missing-reactant failure case.
+
+- `Fermentation_Animation_StarchThenEnzymeCreatesSwollenStarchAndCarbonDioxide` - Starch and enzyme create fermented starch and carbon dioxide while the enzyme remains.
+
+- `Fermentation_DoesNotStart_WhenEnzymeIsMissing` - Starch alone does not ferment.
+
+### LipidOxidationPlayModeTests.cs
+
+Tests normal and heat-accelerated lipid oxidation.
+
+- `NormalOxidation` - A settled lipid creates exactly one oxidised lipid after the normal oxidation duration.
+
+- `HeatedOxidation` - A lipid touching a heat zone creates exactly one oxidised lipid through the accelerated path.
+
 ### LipidReactionPlayModeTests.cs
 
-#### Tests lipid merging and how lipids behave near water.
+Tests lipid merging and how lipids behave near water.
 
 - LipidMerge_FallingLipid_MergesAndGrowsGroundLipid - Two lipids collide, they join into one bigger lipid, and only one remains in the scene
 
@@ -26,7 +56,7 @@ Unity PlayMode tests made it so that we can spawn molecules, move them, all auto
 
 ### PolysaccharidePlayModeTests.cs
 
-#### Tests how polysaccharides change when touch water, heat, and cold.
+Tests how polysaccharides change when touching water, heat, and cold.
 
 - PolysaccharideSwelling - A polysaccharide absorbs a nearby water molecule, and the water disappears
 
@@ -36,7 +66,7 @@ Unity PlayMode tests made it so that we can spawn molecules, move them, all auto
 
 ### ProteinReactionPlayModeTests.cs
 
-#### Tests how proteins denature and bond with each other.
+Tests how proteins denature, bond, and coagulate.
 
 - ProteinDenatureByItself - Manually triggering denaturation on a protein correctly changes its state
 
@@ -45,6 +75,58 @@ Unity PlayMode tests made it so that we can spawn molecules, move them, all auto
 - ProteinBonding - Two denatured proteins that collide lock together into a bonded pair
 
 - TwoProteinDenaturedAtTheSameTimeThenBonded - Two proteins heated in the same zone at the same time still bond correctly when they meet
+
+- `ProteinCoagulatesWhenAcidCollides` - Protein and acid create a solidified protein product and remove the original protein.
+
+### MaillardReactionPlayModeTests.cs
+
+Tests the Maillard reaction between sugar, protein, and heat.
+
+- `MaillardReaction_Animation_ProteinThenSugarCreatesProductAfterTwoSeconds` - Protein and sugar on a heated surface create a Maillard product and hide the reactants.
+
+- `MaillardReaction_DoesNotGenerateProduct_WhenProteinIsMissing` - Sugar inside a heat zone does not generate a Maillard product without protein.
+
+- `MaillardReaction_DoesNotGenerateProduct_WhenSugarHasNotTouchedHeatSurface` - Sugar above the heated surface does not generate a Maillard product.
+
+### ChemicalLearningPanelPlayModeTests.cs
+
+Tests the chemistry panel and self-quiz through its real Unity button listeners.
+
+- `OpenAndBack_ShowsFormulaViewThenHidesPanel` - Open displays the formula view, completes the fade-in, and Back closes the panel.
+
+- `QuizAnswerSelection_UpdatesScoreFeedbackAndButtonState` - A correct answer updates score and feedback, locks answers, rejects duplicate scoring, and advances to the next question.
+
+- `CompletingQuiz_ShowsPerfectResultAndRestartResetsState` - Completing all six questions shows the perfect result and Restart resets the quiz.
+
+### ReactionVideoPlayModeTests.cs
+
+Tests reaction video visibility, clip selection, positioning, and stopping.
+
+- `Play_WithNullClip_RemainsHidden` - A missing clip does not open the video panel.
+
+- `PlayAndHide_WithValidClip_UpdatesVisibilityClipAndPosition` - A valid clip opens and positions the panel; Hide stops playback and closes it.
+
+### StateManagerPlayModeTests.cs
+
+Tests the Clear/Reset object lifecycle.
+
+- `DestroyAll_DestroysEveryRegisteredObject` - Clear destroys every object registered with `StateManager`.
+
+- `UnregisterMolecule_PreventsObjectFromBeingCleared` - An explicitly unregistered object is retained.
+
+- `MoleculeSelectionPanelClear_DelegatesToStateManager` - The selection panel's Clear action delegates to `StateManager` and removes registered molecules.
+
+### PerformanceManagerPlayModeTests.cs
+
+Tests performance defaults, safeguard transitions, throttling, metrics, and mode events.
+
+- `Awake_InitializesNormalModeSignals` - Startup uses Normal mode and its default optimization signals.
+
+- `SetMode_UpdatesOptimizationSignalsAndRaisesOneEventPerChange` - Mode changes update gaze/trigger settings and emit one event per change.
+
+- `EvaluateMode_EntersAndLeavesSafeguardAfterThresholdsAreMet` - Sustained bad/good frame times enter and leave Safeguard mode.
+
+- `ThrottlingAndResetMetrics_ApplyConfiguredLimits` - Gaze/trigger throttling and runtime metric reset use the configured values.
 
 ## End-to-end Test Documentation
 
@@ -107,6 +189,18 @@ Built in Unity using Meta's XR SDK.
 - A zone that gradually denatures any protein inside it, and gelatinizes any swelled polysaccharide that enters
 - Tracks all proteins inside it and increases their denaturation level each frame until they fully denature
 
+### MaillardReactionManager.cs
+
+- Detects when a sugar and protein are both inside a heat zone and triggers the Maillard reaction
+- TriggerMaillard(Sugar, Protein, HeatZone) - spawns the MaillardProduct prefab, plays the smoke VFX, raises the Maillard reaction event, and hides the original reactants
+- Uses MaillardSO.asset for the reaction name, description, color, participants, and event data
+
+### Maillard Reaction Assets
+
+- MaillardSO.asset - stores the Maillard Reaction metadata shown through the reaction event system
+- MaillardProduct.prefab - the brown product generated after sugar and protein react under heat
+- MaillardBrown.mat - the material used by the generated Maillard product
+
 ### StateManager.cs
 
 - A global tracker that tracks every molecule existing in the scene
@@ -132,11 +226,12 @@ Built in Unity using Meta's XR SDK.
 The above is not an exhaustive list of our development files. The following is a list of directories that contain the files and scripts directly added by us. 
 
 (All of these are inside the Assets/ directory)
+Materials/
 Prefabs/
 Scenes/
 Scripts/
+Scripts/ScriptableObjects/Reaction/
 Sprites/
 Tests/
 
 Note: OneGrabFreeTransformerMolecule.cs and Protein/GrabFreeTranformerProtein.cs in Scripts/Molecules are APK library files modified to meet our needs and not written originally by us.
-
